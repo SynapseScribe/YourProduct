@@ -36,7 +36,7 @@ object DownloadHandler {
                         .trimIndent()
 
                 webView.evaluateJavascript(script) { result ->
-                    Log.d("WebView", "Blob download trigger result: $result")
+                    Log.d("Download", "Blob download trigger result: $result")
                 }
 
                 Toast.makeText(
@@ -90,11 +90,11 @@ object DownloadHandler {
 
                 Toast.makeText(
                     context,
-                    context.getString(R.string.msg_dowload_complete, sanitized),
+                    context.getString(R.string.msg_download_complete, sanitized),
                     Toast.LENGTH_LONG
                 ).show()
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.d("Download", "Error: ${e.message}")
                 Toast.makeText(
                     context, context.getString(R.string.msg_download_failed), Toast.LENGTH_SHORT
                 ).show()

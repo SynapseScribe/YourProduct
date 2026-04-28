@@ -14,7 +14,6 @@ import com.foss.aihub.models.AiService
 import com.foss.aihub.utils.readAssetsFile
 import java.io.ByteArrayInputStream
 
-
 class CustomWebViewClient(
     val context: MainActivity,
     private val onProgressUpdate: (Int) -> Unit,

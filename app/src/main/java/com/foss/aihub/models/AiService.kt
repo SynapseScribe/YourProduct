@@ -15,7 +15,9 @@ data class AiService(
 data class AppSettings(
     var theme: String = "auto",
     var loadLastOpenedAI: Boolean = true,
+    var multipleDefaultAi: Boolean = false,
     var defaultServiceId: String = "chatgpt",
+    var defaultServiceIds: Set<String> = emptySet(),
     var serviceOrder: List<String> = emptyList(),
     var enabledServices: Set<String> = emptySet(),
     var favoriteServices: Set<String> = emptySet(),
@@ -26,6 +28,10 @@ data class AppSettings(
     var fontSize: String = "medium",
     var updateFrequencyDays: Int = 3,
     var blockUnnecessaryConnections: Boolean = true,
+    var isProxy: Boolean = false,
+    var proxyType: String = "http",
+    var proxyHost: String = "localhost",
+    var proxyPort: String = "9050",
     var customCss: String = "",
     var customJs: String = ""
 )
