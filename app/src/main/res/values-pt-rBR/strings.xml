@@ -83,7 +83,6 @@
     <string name="label_confirm">Confirmar</string>
     <string name="label_connecting">Conectando…</string>
     <string name="label_connection_failed">Falha na conexão</string>
-    <string name="label_contributors">Contribuidores</string>
     <string name="label_custom_css" translatable="false">CSS</string>
     <string name="label_custom_js" translatable="false">JavaScript</string>
     <string name="label_default_ai">Padrão</string>
@@ -103,8 +102,6 @@
     <string name="label_image_link">Link da imagem</string>
     <string name="label_just_a_moment">Só um momento…</string>
     <string name="label_last_enabled">Último ativado</string>
-    <string name="label_license">Licença</string>
-    <string name="label_license_type">GNU GPLv3</string>
     <string name="label_link">Link</string>
     <string name="label_loading">Carregando…</string>
     <string name="label_made_with_love">Feito com ❤️ por</string>

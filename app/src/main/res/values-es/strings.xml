@@ -77,7 +77,6 @@
     <string name="label_confirm">Confirmar</string>
     <string name="label_connecting">Conectando…</string>
     <string name="label_connection_failed">Conexión fallida</string>
-    <string name="label_contributors">Contribuidores</string>
     <string name="label_default_ai">Por Defecto</string>
     <string name="label_details">Detalles</string>
     <string name="label_email">Correo electrónico</string>
@@ -95,8 +94,6 @@
     <string name="label_image_link">Enlace a imagen</string>
     <string name="label_just_a_moment">Un momento…</string>
     <string name="label_last_enabled">Último habilitado</string>
-    <string name="label_license">Licencia</string>
-    <string name="label_license_type">GNU GPLv3</string>
     <string name="label_link">Enlace</string>
     <string name="label_loading">Cargando…</string>
     <string name="label_made_with_love">Hecho con ❤️ por</string>

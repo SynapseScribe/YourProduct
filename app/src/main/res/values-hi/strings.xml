@@ -74,7 +74,6 @@
     <string name="label_confirm">पुष्टि करें</string>
     <string name="label_connecting">कनेक्ट हो रहा है…</string>
     <string name="label_connection_failed">कनेक्शन विफल</string>
-    <string name="label_contributors">योगदानकर्ता</string>
     <string name="label_default_ai">डिफ़ॉल्ट</string>
     <string name="label_details">विवरण</string>
     <string name="label_email">ईमेल</string>
@@ -92,8 +91,6 @@
     <string name="label_image_link">छवि लिंक</string>
     <string name="label_just_a_moment">बस एक क्षण…</string>
     <string name="label_last_enabled">अंतिम सक्रिय</string>
-    <string name="label_license">लाइसेंस</string>
-    <string name="label_license_type">GNU GPLv3</string>
     <string name="label_link">लिंक</string>
     <string name="label_loading">लोड हो रहा है…</string>
     <string name="label_made_with_love">❤️ के साथ बनाया गया</string>
