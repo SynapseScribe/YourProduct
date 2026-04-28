@@ -1,8 +1,5 @@
 package com.foss.aihub.utils
 
-import android.content.Context
-import android.util.Log
-import androidx.compose.ui.graphics.Color
 import com.foss.aihub.models.AiService
 
 const val USER_AGENT_DESKTOP =
