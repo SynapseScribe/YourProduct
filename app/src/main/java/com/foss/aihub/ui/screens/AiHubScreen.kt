@@ -1,5 +1,6 @@
 package com.foss.aihub.ui.screens
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +64,9 @@ import com.foss.aihub.ui.screens.dialogs.UpdateDialog
 import com.foss.aihub.ui.webview.createWebViewForService
 import com.foss.aihub.ui.webview.updateWebViewSettings
 import com.foss.aihub.utils.DetailedUpdateDetails
+import com.foss.aihub.utils.GITHUB_REPO_NAME
+import com.foss.aihub.utils.GITHUB_USER_NAME
+import com.foss.aihub.utils.SUPPORT_EMAIL
 import com.foss.aihub.utils.ServiceChanges
 import com.foss.aihub.utils.UpdateResult
 import com.foss.aihub.utils.aiServices
@@ -72,6 +76,7 @@ import com.foss.aihub.utils.openInExternalBrowser
 import com.foss.aihub.utils.shareLink
 import kotlinx.coroutines.launch
 import java.io.File
+import java.net.URLEncoder
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -93,8 +98,19 @@ fun AiHubApp(context: MainActivity) {
         settings.defaultServiceId
     }
 
+    val initialServiceIds = remember(settings) {
+        if (!settings.loadLastOpenedAI && settings.multipleDefaultAi) {
+            val ordered =
+                settings.serviceOrder.filter { it in settings.defaultServiceIds && it in settings.enabledServices }
+            ordered.take(settings.maxKeepAlive).toSet()
+        } else {
+            setOf(initialId)
+        }
+    }
+
     var selectedService by remember {
-        mutableStateOf(aiServices.find { it.id == initialId } ?: aiServices.first())
+        val firstId = initialServiceIds.firstOrNull() ?: initialId
+        mutableStateOf(aiServices.find { it.id == firstId } ?: aiServices.first())
     }
 
     var backPressedTime by remember { mutableLongStateOf(0L) }
@@ -104,6 +120,7 @@ fun AiHubApp(context: MainActivity) {
     var showManageServices by remember { mutableStateOf(false) }
     var showCustomInjectionScreen by remember { mutableStateOf(false) }
     var showAbout by remember { mutableStateOf(false) }
+    var showRequestNewAiScreen by remember { mutableStateOf(false) }
 
     var previousEnabledServices by remember { mutableStateOf(settings.enabledServices) }
     var previousDesktopView by remember { mutableStateOf(settings.desktopView) }
@@ -221,6 +238,71 @@ fun AiHubApp(context: MainActivity) {
         updateResult = updateResult,
         onDismiss = { showUpdateDialog = false },
     )
+
+    LaunchedEffect(initialServiceIds) {
+        initialServiceIds.forEach { serviceId ->
+            val service = aiServices.find { it.id == serviceId } ?: return@forEach
+            if (!webViews.containsKey(serviceId)) {
+                val webView = createWebViewForService(
+                    context = context,
+                    service = service,
+                    activity = context,
+                    settings = settings,
+                    onProgressUpdate = { progress ->
+                        updateServiceState(serviceId) { it.copy(progress = progress) }
+                    },
+                    onLoadingStateChange = { isLoading ->
+                        updateServiceState(serviceId) {
+                            it.copy(
+                                isLoading = isLoading,
+                                webViewState = if (isLoading) WebViewState.LOADING else WebViewState.SUCCESS
+                            )
+                        }
+                        if (isLoading) {
+                            updateServiceState(serviceId) { it.copy(error = null) }
+                        }
+                    },
+                    onLinkLongPress = { url, title, type ->
+                        selectedLink = LinkData(url, title, type)
+                        showLinkDialog = true
+                    },
+                    onError = { errorCode, description ->
+                        updateServiceState(serviceId) {
+                            it.copy(
+                                error = errorCode to description,
+                                webViewState = WebViewState.ERROR,
+                                isLoading = false
+                            )
+                        }
+                    },
+                    onJsAlertRequest = { message, result ->
+                        message?.let {
+                            jsDialog = JsDialog.Alert(it, result!!)
+                        }
+                    },
+                    onJsConfirmRequest = { message, result ->
+                        message?.let {
+                            jsDialog = JsDialog.Confirm(it, result!!)
+                        }
+                    },
+                    onJsPromptRequest = { message, result ->
+                        message?.let {
+                            jsDialog = JsDialog.Prompt(it, result!!)
+                        }
+                    },
+                    onJsBeforeUnloadRequest = { message, result ->
+                        message?.let {
+                            jsDialog = JsDialog.BeforeUnload(it, result!!)
+                        }
+                    },
+                )
+                updateWebViewSettings(webView, settings, false)
+                webViews[serviceId] = webView
+                serviceAccessOrder.add(0, serviceId)
+                loadedServices.add(serviceId)
+            }
+        }
+    }
 
     LaunchedEffect(true) {
         val updateFrequency = settings.updateFrequencyDays
@@ -841,6 +923,7 @@ fun AiHubApp(context: MainActivity) {
         }
 
         SettingsScreen(
+            context = context,
             onBack = {
                 showSettingsScreen = false
                 applySettingsToAllWebViews(false)
@@ -920,21 +1003,48 @@ fun AiHubApp(context: MainActivity) {
         BackHandler { showManageServices = false }
         ManageAiServicesScreen(
             onBack = {
-            showManageServices = false
-            enforceWebViewLimit()
-        },
+                showManageServices = false
+                enforceWebViewLimit()
+            },
             enabledServices = settings.enabledServices,
             onEnabledServicesChange = { newSet ->
                 settingsManager.updateSettings { it.enabledServices = newSet }
             },
             defaultServiceId = settings.defaultServiceId,
             loadLastAiEnabled = settings.loadLastOpenedAI,
-            settingsManager = settingsManager
+            settingsManager = settingsManager,
+            onRequestNewAi = {
+                showRequestNewAiScreen = true
+            },
         )
     }
 
     if (showAbout) {
         BackHandler { showAbout = false }
-        AboutScreen(context, onBack = { showAbout = false })
+        AboutScreen(context = context, onBack = { showAbout = false })
+    }
+
+    if (showRequestNewAiScreen) {
+        BackHandler { showRequestNewAiScreen = false }
+        RequestNewAiScreen(
+            onBack = { showRequestNewAiScreen = false },
+            onSubmit = { content, method ->
+                val title = URLEncoder.encode("Request for new AI", "UTF-8")
+                val body = URLEncoder.encode(content, "UTF-8")
+                if (method == "github") {
+                    val label = URLEncoder.encode("new ai", "UTF-8")
+                    val assign = URLEncoder.encode("SilentCoderHere", "UTF-8")
+                    openInExternalBrowser(
+                        context,
+                        "https://github.com/$GITHUB_USER_NAME/$GITHUB_REPO_NAME/issues/new?title=$title&body=$body&labels=$label&assignees=$assign"
+                    )
+                } else {
+                    val mailtoUri = "mailto:$SUPPORT_EMAIL?subject=$title&body=$body".toUri()
+
+                    val emailIntent = Intent(Intent.ACTION_VIEW, mailtoUri)
+                    context.startActivity(Intent.createChooser(emailIntent, "Send email via"))
+                }
+            },
+        )
     }
 }
