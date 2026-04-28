@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.webkit.PermissionRequest
 import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.foss.aihub.ui.components.AiHubTheme
 import com.foss.aihub.ui.screens.AiHubApp
@@ -153,7 +153,6 @@ class MainActivity : ComponentActivity() {
                         }
 
                         isInitialConfigReady -> {
-                            settingsManager.saveLastUpdatedDate()
                             AiHubApp(this@MainActivity)
                         }
 
@@ -239,12 +238,11 @@ class MainActivity : ComponentActivity() {
     }
 
     fun launchFileChooser(
-        filePathCallback: ValueCallback<Array<Uri>>,
-        fileChooserParams: WebChromeClient.FileChooserParams?
+        filePathCallback: ValueCallback<Array<Uri>>
     ) {
         this.filePathCallback = filePathCallback
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
             }
@@ -257,12 +255,18 @@ class MainActivity : ComponentActivity() {
 
         try {
             fileChooserLauncher.launch(intent)
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             filePathCallback.onReceiveValue(null)
             this.filePathCallback = null
-        } catch (e: Exception) {
+            Toast.makeText(
+                this, this.getString(R.string.msg_no_suitable_app_found), Toast.LENGTH_SHORT
+            ).show()
+        } catch (_: Exception) {
             filePathCallback.onReceiveValue(null)
             this.filePathCallback = null
+            Toast.makeText(
+                this, this.getString(R.string.error_generic_title), Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -275,7 +279,7 @@ class MainActivity : ComponentActivity() {
             if (data != null) {
                 val dataString = data.dataString
                 if (dataString != null) {
-                    uris = arrayOf(Uri.parse(dataString))
+                    uris = arrayOf(dataString.toUri())
                 }
             }
         }
