@@ -1,6 +1,7 @@
 package com.foss.aihub.ui.screens
 
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -1029,8 +1030,9 @@ fun AiHubApp(context: MainActivity) {
         RequestNewAiScreen(
             onBack = { showRequestNewAiScreen = false },
             onSubmit = { content, method ->
-                val title = URLEncoder.encode("Request for new AI", "UTF-8")
-                val body = URLEncoder.encode(content, "UTF-8")
+                val title = Uri.encode("Request for new AI").replace("+", "%20")
+                val body = Uri.encode(content).replace("+", "%20")
+
                 if (method == "github") {
                     val label = URLEncoder.encode("new ai", "UTF-8")
                     val assign = URLEncoder.encode("SilentCoderHere", "UTF-8")

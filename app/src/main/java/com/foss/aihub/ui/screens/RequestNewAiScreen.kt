@@ -72,8 +72,8 @@ fun RequestNewAiScreen(
     val formValid = name.isNotBlank() && chatUrl.isNotBlank()
     val sheetState = rememberModalBottomSheetState()
 
-    fun buildContent(): String {
-        val template = context.readAssetsFile("aiRequestTemplate.txt")
+    fun buildContent(method: String): String {
+        val template = context.readAssetsFile("Request Template/${method}.txt")
         val reason = description.ifBlank { "N/A" }
         return template.replace("{{AI_NAME}}", name.trim()).replace("{{CHAT_URL}}", chatUrl.trim())
             .replace("{{REASON}}", reason.trim())
@@ -289,7 +289,7 @@ fun RequestNewAiScreen(
                     description = stringResource(R.string.desc_github_issue),
                     onClick = {
                         showMethodSheet = false
-                        onSubmit(buildContent(), "github")
+                        onSubmit(buildContent("github"), "github")
                     },
                 )
                 MethodCard(
@@ -297,7 +297,7 @@ fun RequestNewAiScreen(
                     description = stringResource(R.string.desc_email_method),
                     onClick = {
                         showMethodSheet = false
-                        onSubmit(buildContent(), "email")
+                        onSubmit(buildContent("email"), "email")
                     },
                 )
             }
