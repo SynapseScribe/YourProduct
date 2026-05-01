@@ -15,8 +15,8 @@ android {
         applicationId = "com.foss.aihub"
         minSdk = 26
         targetSdk = 36
-        versionCode = 11
-        versionName = "2.3.0"
+        versionCode = 12
+        versionName = "2.3.1"
     }
 
     compileOptions {
