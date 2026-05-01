@@ -700,29 +700,29 @@ fun SettingsScreen(
 
             item {
                 SettingsCard {
-                    SettingItem(
-                        title = stringResource(R.string.setting_block_trackers_ads),
-                        description = stringResource(R.string.setting_block_trackers_ads_description),
-                        icon = Icons.Outlined.Block,
-                        iconColor = MaterialTheme.colorScheme.primary
-                    ) {
-                        Switch(
-                            checked = blockUnnecessaryConnections, onCheckedChange = {
-                                blockUnnecessaryConnections = it
-                                settingsManager.updateSettings { settings ->
-                                    settings.blockUnnecessaryConnections = it
-                                }
-                            }, colors = defaultSwitchTheme
-                        )
+                    Column {
+                        SettingItem(
+                            title = stringResource(R.string.setting_block_trackers_ads),
+                            description = stringResource(R.string.setting_block_trackers_ads_description),
+                            icon = Icons.Outlined.Block,
+                            iconColor = MaterialTheme.colorScheme.primary
+                        ) {
+                            Switch(
+                                checked = blockUnnecessaryConnections, onCheckedChange = {
+                                    blockUnnecessaryConnections = it
+                                    settingsManager.updateSettings { settings ->
+                                        settings.blockUnnecessaryConnections = it
+                                    }
+                                }, colors = defaultSwitchTheme
+                            )
+                        }
                     }
-                }
 
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant,
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
 
-                SettingsCard {
                     var showProxyOptions by remember { mutableStateOf(false) }
 
                     LaunchedEffect(Unit) {
@@ -740,7 +740,8 @@ fun SettingsScreen(
                         description = stringResource(R.string.msg_set_proxy),
                         icon = Icons.Outlined.Wifi,
                         iconColor = MaterialTheme.colorScheme.primary,
-                        onClick = { showProxyOptions = !showProxyOptions }) {
+                        onClick = { showProxyOptions = !showProxyOptions },
+                    ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 text = when (proxyOption) {
