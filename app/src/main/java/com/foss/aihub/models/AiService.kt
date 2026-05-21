@@ -19,7 +19,7 @@ data class AppSettings(
     var defaultServiceId: String = "chatgpt",
     var defaultServiceIds: Set<String> = emptySet(),
     var serviceOrder: List<String> = emptyList(),
-    var enabledServices: Set<String> = emptySet(),
+    var enabledServices: Set<String> = setOf("lumo"),
     var favoriteServices: Set<String> = emptySet(),
     var maxKeepAlive: Int = 5,
     var enableZoom: Boolean = true,
