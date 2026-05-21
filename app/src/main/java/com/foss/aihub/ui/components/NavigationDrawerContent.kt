@@ -351,7 +351,7 @@ fun DrawerContent(
                 val nonFavoriteFilteredServices by derivedStateOf {
                     filteredServices.filter { it.id !in favoriteServices }
                 }
-
+/*
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -436,7 +436,7 @@ fun DrawerContent(
                             })
                     }
                 }
-
+*/
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
