@@ -16,6 +16,10 @@ fun loadAiServices(rawList: List<List<String>>) {
         if (name.isBlank()) return@mapNotNull null
 
         val id = generateId(name)
+        
+        // Only allow Lumo
+        if (id != "lumo") return@mapNotNull null
+        
         val url = row[1].trim()
         val category = row.getOrNull(2)?.trim() ?: "Unknown"
         val description = row.getOrNull(3)?.trim() ?: "Unknown"
