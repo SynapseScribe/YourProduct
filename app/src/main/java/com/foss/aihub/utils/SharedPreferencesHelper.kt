@@ -210,6 +210,7 @@ class SettingsManager(context: Context) {
     }
 
     private fun loadEnabledServices(): Set<String> {
+        val json = sharedPref.getString("enabledServices", null)
         return setOf("lumo").intersect(aiServices.map { it.id }.toSet())
     }
 
@@ -219,13 +220,7 @@ class SettingsManager(context: Context) {
     }
 
     private fun loadServiceOrder(): List<String> {
-        val json = sharedPref.getString("serviceOrder", null)
-        return if (json.isNullOrEmpty()) {
-            aiServices.map { it.id }.filter { it == "lumo" }
-        } else {
-            val type = object : TypeToken<List<String>>() {}.type
-            gson.fromJson(json, type).filter { it == "lumo" }
-        }
+        return listOf("lumo").filter { it in aiServices.map { s -> s.id } }
     }
 
     private fun saveServiceOrder(order: List<String>) {
