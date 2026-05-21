@@ -100,7 +100,7 @@ fun AiHubAppBar(
     onReload: (AiService) -> Unit,
     onServiceSelected: (AiService) -> Unit
 ) {
-    var showServicesDialog by remember { mutableStateOf(false) }
+ //   var showServicesDialog by remember { mutableStateOf(false) }
     var showClearDataDialog by remember { mutableStateOf(false) }
     var expanded: Boolean by remember { mutableStateOf(false) }
 
@@ -143,6 +143,7 @@ fun AiHubAppBar(
             )
         }
     }, actions = {
+            /*
         BadgedBox(
             badge = {
                 if (loadedServiceIds.isNotEmpty()) {
@@ -172,7 +173,7 @@ fun AiHubAppBar(
                 )
             }
         }
-
+*/
         Box {
             IconButton(
                 onClick = { expanded = true },
@@ -264,7 +265,7 @@ fun AiHubAppBar(
         actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
     ), windowInsets = TopAppBarDefaults.windowInsets
     )
-
+/*
     if (showServicesDialog) {
         ActiveServicesDialog(
             activeServices = loadedServiceIds.mapNotNull { id -> allServices.find { it.id == id } },
@@ -276,7 +277,7 @@ fun AiHubAppBar(
             onKillService = onKillService,
             onDismiss = { showServicesDialog = false })
     }
-
+*/
     if (showClearDataDialog) {
         AlertDialog(
             onDismissRequest = { showClearDataDialog = false },
