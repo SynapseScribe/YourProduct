@@ -159,7 +159,7 @@ class SettingsManager(context: Context) {
             theme = sharedPref.getString("theme", "auto") ?: "auto",
             loadLastOpenedAI = sharedPref.getBoolean("loadLastOpenedAI", true),
             multipleDefaultAi = sharedPref.getBoolean("multipleDefaultAi", false),
-            defaultServiceId = sharedPref.getString("defaultServiceId", "chatgpt") ?: "chatgpt",
+            defaultServiceId = sharedPref.getString("defaultServiceId", "lumo") ?: "lumo",
             defaultServiceIds = sharedPref.getStringSet("defaultServiceIds", emptySet())
                 ?: emptySet(),
             serviceOrder = loadServiceOrder(),
@@ -210,13 +210,7 @@ class SettingsManager(context: Context) {
     }
 
     private fun loadEnabledServices(): Set<String> {
-        val json = sharedPref.getString("enabledServices", null)
-        return if (json.isNullOrEmpty()) {
-            aiServices.map { it.id }.toSet()
-        } else {
-            val type = object : TypeToken<Set<String>>() {}.type
-            gson.fromJson(json, type)
-        }
+        return setOf("lumo").intersect(aiServices.map { it.id }.toSet())
     }
 
     private fun saveEnabledServices(services: Set<String>) {
@@ -227,10 +221,10 @@ class SettingsManager(context: Context) {
     private fun loadServiceOrder(): List<String> {
         val json = sharedPref.getString("serviceOrder", null)
         return if (json.isNullOrEmpty()) {
-            aiServices.map { it.id }
+            aiServices.map { it.id }.filter { it == "lumo" }
         } else {
             val type = object : TypeToken<List<String>>() {}.type
-            gson.fromJson(json, type)
+            gson.fromJson(json, type).filter { it == "lumo" }
         }
     }
 
