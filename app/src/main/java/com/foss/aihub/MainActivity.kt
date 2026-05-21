@@ -131,10 +131,12 @@ class MainActivity : ComponentActivity() {
         try {
             settingsManager = SettingsManager(this)
 
-            if (!needsInitialConfig()) {
-                refreshAiServicesFromSettings(this)
-                settingsManager.cleanupAndFixServices(this)
-            }
+if (!needsInitialConfig()) {
+    refreshAiServicesFromSettings(this)
+    settingsManager.cleanupAndFixServices(this)
+    // Force Lumo as default
+    settingsManager.updateSettings { it.defaultServiceId = "lumo" }
+}
 
             initializeFileChooserLauncher()
 
