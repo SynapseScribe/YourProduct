@@ -330,24 +330,24 @@ fun SettingsScreen(
                             exit = fadeOut() + shrinkVertically()
                         ) {
                             Column(modifier = Modifier.padding(bottom = 8.dp)) {
-                                SettingItem(
-                                    title = "Multiple default AIs",
-                                    description = "Open all default AI when app start",
-                                    icon = Icons.Outlined.Computer,
-                                    iconColor = MaterialTheme.colorScheme.primary
-                                ) {
-                                    Switch(
-                                        checked = multipleDefaultAi,
-                                        onCheckedChange = { multipleDefaultAi = it },
-                                        colors = defaultSwitchTheme
-                                    )
-                                }
+                                // SettingItem(
+                                //     title = "Multiple default AIs",
+                                //     description = "Open all default AI when app start",
+                                //     icon = Icons.Outlined.Computer,
+                                //     iconColor = MaterialTheme.colorScheme.primary
+                                // ) {
+                                //     Switch(
+                                //         checked = multipleDefaultAi,
+                                //         onCheckedChange = { multipleDefaultAi = it },
+                                //         colors = defaultSwitchTheme
+                                //     )
+                                // }
 
                                 HorizontalDivider(
                                     color = MaterialTheme.colorScheme.outlineVariant,
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
-
+/*
                                 ListItem(
                                     headlineContent = {
                                         Text(
@@ -433,28 +433,29 @@ fun SettingsScreen(
                                         )
                                     }
                                 }
+                                */
                             }
                         }
-
+/*
                         HorizontalDivider(
                             color = MaterialTheme.colorScheme.outlineVariant,
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
-
-                        SettingItem(
-                            title = stringResource(R.string.setting_manage_ai_services),
-                            description = stringResource(R.string.setting_manage_ai_services_description),
-                            icon = Icons.Outlined.Apps,
-                            iconColor = MaterialTheme.colorScheme.primary,
-                            onClick = onManageServices,
-                            trailingContent = {
-                                Icon(
-                                    Icons.Outlined.ChevronRight,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            },
-                        )
+*/
+                        // SettingItem(
+                        //     title = stringResource(R.string.setting_manage_ai_services),
+                        //     description = stringResource(R.string.setting_manage_ai_services_description),
+                        //     icon = Icons.Outlined.Apps,
+                        //     iconColor = MaterialTheme.colorScheme.primary,
+                        //     onClick = onManageServices,
+                        //     trailingContent = {
+                        //         Icon(
+                        //             Icons.Outlined.ChevronRight,
+                        //             contentDescription = null,
+                        //             tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        //         )
+                        //     },
+                        // )
                     }
                 }
             }
