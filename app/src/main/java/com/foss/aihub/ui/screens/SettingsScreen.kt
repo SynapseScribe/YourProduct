@@ -342,11 +342,12 @@ fun SettingsScreen(
                                 //         colors = defaultSwitchTheme
                                 //     )
                                 // }
-
+/*
                                 HorizontalDivider(
                                     color = MaterialTheme.colorScheme.outlineVariant,
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
+                                */
 /*
                                 ListItem(
                                     headlineContent = {
