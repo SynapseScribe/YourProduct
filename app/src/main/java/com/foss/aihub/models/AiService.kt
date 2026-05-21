@@ -16,7 +16,7 @@ data class AppSettings(
     var theme: String = "auto",
     var loadLastOpenedAI: Boolean = true,
     var multipleDefaultAi: Boolean = false,
-    var defaultServiceId: String = "chatgpt",
+    var defaultServiceId: String = "lumo",
     var defaultServiceIds: Set<String> = emptySet(),
     var serviceOrder: List<String> = emptyList(),
     var enabledServices: Set<String> = setOf("lumo"),
